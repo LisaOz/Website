@@ -71,7 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bookmarks.wsgi.application'
 
-
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # class that will be used to send emails
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
