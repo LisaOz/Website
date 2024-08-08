@@ -1,8 +1,11 @@
 from django.contrib.auth import views as auth_views
-from django.urls import path
+from django.urls import path #, include - for the  Django provide URL patterns
 from . import views
 
 urlpatterns = [
+    # path('', include('django.contrib.auth.urls')), - Django provided URL pattern
+
+
     #path('login/', views.user_login, name='login'),
 
     path('login/', auth_views.LoginView.as_view(), name='login'), # Login view from Django authentication framework
@@ -17,4 +20,6 @@ urlpatterns = [
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('password-reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'), # tocken
     path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
+    path('register/', views.register, name='register'),
 ]

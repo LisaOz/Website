@@ -10,7 +10,10 @@
         Your username and password do not match. Please try again.
     </p>
     {% else %}
-    <p>Please use the form to log in:</p>
+    <p>
+        Please use this form to log in.
+        if you do not have an account, <a href="{% url 'register' %}">register here</a>
+    </p>
     {% endif %}
     <div class="login-form">
         <form action="{% url 'login' %}" method="post">
