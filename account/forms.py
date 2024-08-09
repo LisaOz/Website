@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from .models import Profile
 
 
 """ 
@@ -11,8 +12,7 @@ class LoginForm(forms.Form):
 
 
 """
-
-A model form for user model used for the registration on the website with username, real name and a password
+This is a model form for user model used for the registration on the website with username, real name and a password
 """
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(
@@ -23,6 +23,7 @@ class UserRegistrationForm(forms.ModelForm):
         label = 'Repeat password',
         widget = forms.PasswordInput
     )
+
 
     """
     Method to ensure both entered passwords match
@@ -37,4 +38,19 @@ class UserRegistrationForm(forms.ModelForm):
         model = get_user_model() # retrieve user model dynamically
         fields = ['username', 'first_name', 'email']
 
-    
+
+"""
+Form to allow users to edit Django built-in attributes: first name, last name and email.
+""" 
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name', 'last_name', 'email']
+
+"""
+Form to allow users to edit the profile data that is saved to the custom Profile model: edit date of birth and photo 
+""" 
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['date_of_birth', 'photo']

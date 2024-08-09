@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
 ]
 
 MIDDLEWARE = [
@@ -127,3 +126,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'dashboard' # to redirect the user after successful login
 LOGIN_URL = 'login' # to redirect the user to log in 
 LOGOUT_URL = 'logout' # to redirect the user to log out
+
+"""
+Dynamic URL and paths to manage file uploads and serve media files.
+"""
+MEDIA_URL = 'media/' # base url used to serve the media files uploaded by users
+MEDIA_ROOT = BASE_DIR / 'media' # local path where the uploaded files are stored

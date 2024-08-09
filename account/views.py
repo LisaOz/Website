@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import render
-from .forms import LoginForm, UserRegistrationForm
+from django.shortcuts import redirect, render
+from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
+from .models import Profile
 
 # Create your views here.
 
@@ -49,6 +51,7 @@ def register(request):
                 user_form.cleaned_data['password']
             )
             new_user.save() # save user
+            Profile.objects.create(user=new_user) # Create user profile
             return render(
                 request,
                 'account/register_done.html', # display the form with the user registered template
@@ -60,4 +63,42 @@ def register(request):
         request,
         'account/register.html',
         {'user_form': user_form}
+    )
+
+
+""" 
+This is an edit view to allow user to edit their details. 
+"""
+@login_required # For authenticated users only
+def edit(request):
+    if request.method == "POST":
+        user_form = UserEditForm( # to store the data of the built-in user model
+            instance=request.user,
+            data=request.POST
+        )
+
+        profile_form = ProfileEditForm( # to store the data of the custom Profile model
+            instance=request.user.profile,
+            data=request.POST,
+            files=request.FILES
+        )
+
+        # if both forms contain valid data, both forms are saved to update the corresponding oblects in the database
+        if user_form.is_valid() and profile_form.is_valid(): 
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Changes saved successfully.')
+            return redirect('dashboard')
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+    
+    # Render the edit page with forms
+    return render(
+        request,
+        'account/edit.html',
+        {
+            'user_form': user_form,
+            'profile_form': profile_form
+        }
     )
