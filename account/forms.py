@@ -33,6 +33,13 @@ class UserRegistrationForm(forms.ModelForm):
         if cd['password'] != cd['password2']:
             raise forms.ValidationError("Passwords do not match")
         return cd['password2']
+    
+    # Add validation to the email field that prevents users from registering  with the existing email
+    def clean_email(self):
+        data = self.cleaned_data['email'] # QuorySet to look up existing users with the same email address
+        if User.objects.filter(email=data).exists(): # check for results
+            raise forms.ValidationError('Email already registered')
+        return data
 
     class Meta:
         model = get_user_model() # retrieve user model dynamically
@@ -46,6 +53,22 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ['first_name', 'last_name', 'email']
+
+    """ 
+    Method to prevent users from changing their email address to the existing email adddress of an existing user
+    by excluding the current user from the query set
+    """
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        sq = User.objects.exclude( # exclude the current address
+            id = self.instance.id
+        ).filter(
+            email = data
+        )
+        if qs.exists():
+            raise forms.ValidationError('Email already registered.')
+        return data
+
 
 """
 Form to allow users to edit the profile data that is saved to the custom Profile model: edit date of birth and photo 

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-i=vn0-zah9-jrkwvs2vi$u_*@s74u!-m#p+_z_c2mvs9z^t64#'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback_secret_key_for_local')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -132,3 +134,11 @@ Dynamic URL and paths to manage file uploads and serve media files.
 """
 MEDIA_URL = 'media/' # base url used to serve the media files uploaded by users
 MEDIA_ROOT = BASE_DIR / 'media' # local path where the uploaded files are stored
+
+"""
+Custom authentication backend
+"""
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', # default ModelBackend used for authentication with username and password
+    'account.authentication.EmailAuthBackend',
+]
