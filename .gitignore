@@ -19,3 +19,7 @@ env/
 *.sqlite3
 /staticfiles/
 /media/
+
+cert.crt
+cert.key
+db.sqlite3
