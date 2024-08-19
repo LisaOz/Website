@@ -12,28 +12,65 @@ link.href = styleUrl + '?r=' + Math.floor(Math.random()*9999999999999999);
 head.appendChild(link);
 
 // load HTML
-var body = docuement.getElementsByTagName('body')[0];
-boxHtml =
+var body = document.getElementsByTagName('body')[0];
+
+// Define the HTML content as a string
+boxHtml = `
     <div id="bookmarklet">
         <a href="#" id="close">&times;</a> 
         <h1>Select an image to bookmark:</h1>
         <div class="images"></div>
-    </div>;
+    </div>
+`;
+
+// Append the HTML to the body
 body.innerHTML += boxHtml;
 
+// The bookmarklet launcher function
 function bookmarkletLaunch() {  
     bookmarklet = document.getElementById('bookmarklet');
-    var ImagesFound = bookmarklet.querySelector('.images');
+    var imagesFound = bookmarklet.querySelector('.images');
 
     // clear images found
-    ImagesFound.innerHTML = '';
+    imagesFound.innerHTML = '';
     // display bookmarklet
     bookmarklet.style.display = 'block';
-    // close element
+    // close event
     bookmarklet.querySelector('#close')
                 .addEventListener('click', function(){
                     bookmarklet.style.display = 'none'
                 });
+
+
+    // Find images in the DOM (document object model) with the minimum dimensions
+    images = document.querySelectorAll('img[src$=".jpg"], img[src$=".jpeg"], img[src$=".png"]');
+    images.forEach(image => {
+        if(image.naturalWidth >= minWidth
+            && image.naturalHeight >= minHeight)
+            {
+                var imageFound = document.createElement('img');
+                imageFound.src = image.src;
+                imagesFound.append(imageFound);
+            }        
+    })
+
+/*
+Function that allows user to click on the desired image to bookmark it.
+*/
+
+// Select image event
+imagesFound.querySelectorAll('img').forEach(image => {
+    image.addEventListener('click', function(event){ // click event is attached to each element within the ImageFound container
+        imageSelected = event.target; // every clicked image is stored in the imageSelected variable
+        bookmarklet.style.display = 'none'; // the bookmarklet is hidden by setting display property to 'none'
+        window.open(siteUrl + 'images/create/?url=' // a new browser window is opened with the URL to bookmark a new image on the site
+            + encodeURIComponent(imageSelected.src)
+            + '&title='
+            + encodeURIComponent(document.title),
+            '_blank');
+        })
+    })
 }
 // Launch the bookmarklet
 bookmarkletLaunch();
+

@@ -15,7 +15,7 @@ class Profile(models.Model): # inherit from models.Model
     
     date_of_birth = models.DateField(blank=True, null=True) # this field is optional
     photo = models.ImageField(
-        upload_to='users/%Y/%m/%d/', # store te relative path to the file in the related databaase field
+        upload_to='users/%Y/%m/%d/', # store te relative path to the file in the related databaase field (year, month, day)
         blank=True  # photo is optional. if the value is empty, a blank string will be stored
     )
 
