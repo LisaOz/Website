@@ -34,7 +34,7 @@
             </span>
         </div>
         {% if messages %}
-        <ul class="messaages">
+        <ul class="messages">
             {% for message in messages %}
             <li class="{{ message.tags }}">
                 {{ message|safe }}
@@ -43,9 +43,9 @@
             {% endfor %}
         </ul>
     {% endif %}
-        <div id="content">
-            {% block content %}
-            {% endblock %}
-        </div>
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
     </body>
 </html>

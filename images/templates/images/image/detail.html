@@ -5,7 +5,10 @@
 
 {% block content %}
     <h1>{{ image.title }}</h1>
-    <img src="{{ image.image.url }}" class="image-detail">
+    {% load thumbnail %}
+    <a href="{{ image.image.url }}">
+        <img src="{% thumbnail image.image 300x0 %}" class="image-detail"> <!-- define a thumbnail with the fized width  and flexible height-->
+    </a>
     {% with total_likes=image.users_like.count %} <!-- create the total likes variable that counts all user likes-->
         <div class="image-info">
             <div>
@@ -13,7 +16,7 @@
                     {{ total_likes }} like{{ total_likes|pluralize }}
                 </span>
             </div>
-            {{ image.descriptions|linebreaks }}
+            {{ image.description|linebreaks }}
         </div>
         <div class="image-likes">
             {% for user in image.users_like.all %}

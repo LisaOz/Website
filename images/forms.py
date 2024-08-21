@@ -16,7 +16,7 @@ class ImageCreateForm(forms.ModelForm):
         }
 
     """
-    Method tp clean the url field by splitting the url to see if it has a valid extension
+    Method to clean the url field by splitting the url to see if it has a valid extension
     """
     def clean_url(self):
         url = self.cleaned_data['url']
