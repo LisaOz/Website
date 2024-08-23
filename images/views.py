@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
-from django.http import JsonResponse
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from .forms import ImageCreateForm
 from .models import Image
@@ -58,3 +59,34 @@ def image_like(request):
         except Image.DoesNotExist:
             pass
     return JsonResponse({'status': 'error'})
+
+"""
+A view to retrieve all images from the database. If requested by the browser, the whole page will be rendered.
+For Fetch API requests, we will only render the HTML with new images, and they will be appended to the existing HTML page.
+"""
+@login_required
+def image_list(request):
+    images = Image.objects.all()
+    paginator = Paginator(images, 8) # paginator to paginate over the results, retrieving 8 images per page
+    page = request.GET.get('page') # to get requested page number
+    images_only = request.GET.get('images_only') # check if retrieve the whole page or just new images
+    try:
+        images = paginator.page(page)
+    except PageNotAnInteger:
+        images = paginator.page(1) # display the first page if the requested page is not an integer
+    except EmptyPage:
+        if images_only:
+            return HttpResponse('') # if AJAX request is out of range, return an empty page
+        images = paginator.page(paginator.num_pages) # if page os out of range return the last page
+    if images_only:
+        return render(
+            request,
+            'images/image/list_images.html',
+            {'section': 'images', 'images': images}
+        )
+    return render(
+        request,
+        'images/image/list.html',
+        {'section': 'images', 'images': images}
+    )
+        

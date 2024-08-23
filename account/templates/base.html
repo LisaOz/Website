@@ -10,8 +10,8 @@
             <span class="logo">Bookmarks</span>
             {% if request.user.is_authenticated %}
             <ul class="menu">
-                <li {% if section == "dashboard" %}class="selected"{% endif %}>
-                    <a href="{% url 'dashboard' %}">My Dashboard</a>
+                <li {% if section == "images" %}class="selected"{% endif %}>
+                    <a href="{% url 'images:list' %}">My Dashboard</a>
                 </li>
                 <li {% if section == "images" %}class="selected"{% endif %}>
                     <a href="#">Images</a>
@@ -51,7 +51,7 @@
     <script>
         const csrftoken = Cookies.get('csrftoken');
         document.addEventListener('DOMContentLoaded', (event) => {
-            //DOM loaded
+           
             {% block domready %}
             {% endblock %}
         })
