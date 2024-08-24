@@ -21,7 +21,7 @@
 window.addEventListener('scroll', function(e) { // capture the scroll event and define a handler fucntion for it
     var margin = document.body.clientHeight - window.innerHeight - 200; //calculate the margin difference left to the user to scroll
     if(window.pageYOffset > margin && !emptyPage && !blockRequest) {
-        blockRequest = true; /* to prevent the scroll event from triggering additional Http requests */
+        blockRequest = true; // to prevent the scroll event from triggering additional Http requests
         page += 1; // increase the page counter to retrieve the next page
         fetch('?images_only=1&page=' + page) // send the Http Get request, setting the URL parameters to image_only=1 and the page for requested page number
         .then(response => response.text()) // The body content is extracted from HTTP response
@@ -30,7 +30,7 @@ window.addEventListener('scroll', function(e) { // capture the scroll event and 
                 emptyPage = true;
             }
             else {
-                // if response contain data, it is appended to the HTML element with the image-list ID
+                // if response contains data, it is appended to the HTML element with the image-list ID
                 var imageList = document.getElementById('image_list');
                 imageList.insertAdjacentHTML('beforeEnd', html); 
                 blockRequest = false; // remove the lock for the additional Http requests

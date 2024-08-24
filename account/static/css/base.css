@@ -287,3 +287,20 @@ img.user-detail {
     font-style:italic;
     color:#ccc;
 }
+
+/* Grid Layout */
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Create 4 equal columns */
+    gap: 1rem; /* Space between grid items */
+    width: 100%; /* Ensure the grid takes full width of the container */
+}
+
+
+/* Image */
+.grid-item img {
+    width: 100%; /* Ensure the image fits within the container width */
+    height: 100%; /* Ensure the image fits within the container height */
+    object-fit: cover; /* Maintain the aspect ratio and cover the area */
+    display: block; /* Prevent extra space below the image */
+}
