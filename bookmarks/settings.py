@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+from django.urls import reverse_lazy
 from pathlib import Path
 import os
 from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -137,8 +138,17 @@ LOGOUT_URL = 'logout' # to redirect the user to log out
 """
 Dynamic URL and paths to manage file uploads and serve media files.
 """
-MEDIA_URL = 'media/' # base url used to serve the media files uploaded by users
+MEDIA_URL = '/media/' # base url used to serve the media files uploaded by users
 MEDIA_ROOT = BASE_DIR / 'media' # local path where the uploaded files are stored
+
+""" 
+Django adds a get_absolute_url() method dynamically to any models that appear in the ABSOLUTE_URL_OVERRIDES setting.
+This method returns the corresponding URL for the given model specified in the setting
+
+"""
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: reverse_lazy('user_detail', args=[u.username])
+}
 
 """
 Custom authentication backend
