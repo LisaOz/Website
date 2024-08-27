@@ -1,4 +1,4 @@
-<!-- This is a template for displaying the detail view of a bookmarked image -->
+<!--This is a template for displaying the detail view of a bookmarked image-->
 {% extends "base.html" %}
 
 {% block title %}{{ image.title}}{% endblock %}
@@ -8,9 +8,9 @@
 
     {% load thumbnail %}
     <a href="{{ image.image.url }}">
-        <img src="{% thumbnail image.image 300x0 %}" class="image-detail"> <!-- define a thumbnail with the fized width  and flexible height-->
+        <img src="{% thumbnail image.image 300x0 %}" class="image-detail"> {# Define a thumbnail with the fized width  and flexible height #}
     </a>
-    {% with total_likes=image.users_like.count users_like=image.users_like.all %} <!-- create the total likes variable that counts all user likes-->
+    {% with total_likes=image.users_like.count users_like=image.users_like.all %} {# Create the total likes variable that counts all user likes #}
         <div class="image-info">
             <div>
                 <span class="count">
@@ -61,7 +61,8 @@
         formData.append('action', likeButton.dataset.action);
         options['body'] = formData;
 
-<!-- Send Http request-->
+
+        // Send Http request    
         fetch(url, options)
 
         .then(response => response.json())

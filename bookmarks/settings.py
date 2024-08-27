@@ -32,8 +32,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['myblog.com', 'localhost', '127.0.0.1'] 
 
 
-# Application definition
-
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'django.contrib.admin',
@@ -135,11 +133,13 @@ LOGIN_REDIRECT_URL = 'dashboard' # to redirect the user after successful login
 LOGIN_URL = 'login' # to redirect the user to log in 
 LOGOUT_URL = 'logout' # to redirect the user to log out
 
+
 """
 Dynamic URL and paths to manage file uploads and serve media files.
 """
 MEDIA_URL = '/media/' # base url used to serve the media files uploaded by users
 MEDIA_ROOT = BASE_DIR / 'media' # local path where the uploaded files are stored
+
 
 """ 
 Django adds a get_absolute_url() method dynamically to any models that appear in the ABSOLUTE_URL_OVERRIDES setting.
