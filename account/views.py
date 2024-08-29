@@ -6,6 +6,8 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Contact, Profile
+from actions.utils import create_action
+from actions.models import Action
 
 # Create your views here.
 
@@ -32,17 +34,33 @@ def user_login(request):
     return render(request, 'account/login.html', {'form': form})
 
 """
-Dashboard view; being displayed after check whether the user is authenticated, 
+Dashboard view; being displayed after the check that the user is authenticated, 
 otherwise the user is redirected to the Login URL
 """
 @login_required
 def dashboard(request):
+    # Get the list of the ids of users the current user is following
+    following_ids = request.user.following.values_list(
+        'id', flat=True
+    )
+    if following_ids: 
+        # Retrieve actions by followed users, excluding the current user
+        actions = Action.objects.filter(user_id__in=following_ids).exclude(user=request.user)
+    else:
+        actions = Action.objects.none() # if the user is not following anyone, return an empy queryset
+    actions = actions.select_related( # argument to the select_related joins the selected user profile to the Profile table 
+        'user', 'user__profile'
+    ) .prefetch_related('target')[:10] # limit the result by the first 10 actions returned, recent actions coming first (because in Action model they were ordered by [-created])
     return render(
         request,
         'account/dashboard.html',
-        {'section': 'dashboard'}
+        {'section': 'dashboard', 'actions': actions}
     )
 
+
+"""
+Register view
+"""
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
@@ -53,6 +71,7 @@ def register(request):
             )
             new_user.save() # save user
             Profile.objects.create(user=new_user) # Create user profile
+            create_action(new_user, 'has created an account')
             return render(
                 request,
                 'account/register_done.html', # display the form with the user registered template
@@ -125,7 +144,7 @@ Detail view for user object
 """
 @login_required
 def user_detail(request, username):
-    user = get_object_or_404(User, username=username, is_active=True) # retrive the active user with the given username
+    user = get_object_or_404(User, username=username, is_active=True) # retrieve the active user with the given username
     return render(
         request,
         'account/user/detail.html',
@@ -150,6 +169,7 @@ def user_follow(request):
                     user_from=request.user,
                     user_to=user
                 )
+                create_action(request.user, 'is following', user) # add an action 'following' to the activity stream
             else:
                 Contact.objects.filter(
                     user_from=request.user,

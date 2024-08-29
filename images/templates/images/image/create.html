@@ -1,3 +1,4 @@
+<!--Form for bookmarking the image-->
 {% extends "base.html" %}
 
 {% block title %}Bookmark an image{% endblock %}
@@ -6,7 +7,8 @@
     <h1>Bookmark an image</h1>
     <img src="{{ request.GET.url }}" class="image-preview">
     
-    <!-- Form for bookmarking the image-->
+
+ 
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}

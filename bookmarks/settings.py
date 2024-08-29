@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'images.apps.ImagesConfig', # the application for images bookmarking
     'easy_thumbnails', # the application for displaying images in a uniform manner
+    'actions.apps.ActionsConfig', # application to display activity stream
+
 ]
 
 MIDDLEWARE = [
