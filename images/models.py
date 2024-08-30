@@ -20,11 +20,12 @@ class Image(models.Model):
     image = models.ImageField(upload_to='images/%Y/%m/%d/')  # the image file
     description = models.TextField(blank=True)  # optional description of the image
     created = models.DateTimeField(auto_now_add=True)  # time and date when the object was created in the database, current datetime is set automatically
-
+    total_likes = models.PositiveIntegerField(default=0)
     users_like = models.ManyToManyField( # create intermediary join table
         settings.AUTH_USER_MODEL,
         related_name='images_liked', # relationship from the related object to this 
         blank=True
+    
     )
 
 
@@ -34,6 +35,7 @@ class Image(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=['created']),  # define a database index in descending order (indicated by hyphen) for the 'created' field
+            models.Index(fields=['-total_likes']) # store the total number of users who like each image
         ]
         ordering = ['-created'] # the new images will be displayed first
 
