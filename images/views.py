@@ -49,13 +49,44 @@ View to display an image
 """
 def image_detail(request, id, slug):
     image = get_object_or_404(Image, id=id, slug=slug)
+
     # Increment total image views by 1
     total_views = r.incr(f'image:{image.id}:views') # increment, store the final value in the total-views variable and pass it into template
+    
+    # Increment image ranking by 1. Zincrby() command is used  to store image views in a sorted set with the image:ranking key
+    r.zincrby('image_ranking', 1, image.id)
     return render(
         request,
         'images/image/detail.html',
         {'section': 'images', 'image': image, 'total_views': total_views}
     )
+
+""" 
+A view to display the ranking of the most viewed images
+"""
+@login_required
+def image_ranking(request):
+    # Get image ranking dictionaty
+    image_ranking = r.zrange(  # obtain the elements in the sorted set
+        'image_ranking', 0, -1, # 0 -lowest score, -1 - highest score
+        desc = True # retieve elements by descending score
+    )[:10]  # get the fist 10 elements of the highest score
+    image_ranking_ids = [int(id) for id in image_ranking]
+
+    # Get most-viewed images. Bild a list of returned image ids and store it as a list of integers
+    most_viewed = list(
+        Image.objects.filter(
+            id__in=image_ranking_ids
+
+        )
+    )
+    most_viewed.sort(key=lambda x: image_ranking_ids.index(x.id))
+    return render(
+        request,
+        'images/image/ranking.html',
+        {'section': 'images', 'most_viewed': most_viewed}
+    )
+
 
 @login_required
 @require_POST
