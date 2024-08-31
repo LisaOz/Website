@@ -196,3 +196,8 @@ if DEBUG:
 INTERNAL_IPS = [ # Django debug toolbar will only display if the IP address matches an entry in the INTERNAL_IPS setting.
     '127.0.0.1',
 ]
+
+# Settings for the Redis server and the database for the Bookmark project
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
