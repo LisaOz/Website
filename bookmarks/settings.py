@@ -27,12 +27,13 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback_secret_key_for_local')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # Important: prevents showing debug information in production
 
 ALLOWED_HOSTS = ['myblog.com', 'localhost', '127.0.0.1'] 
 
 
 INSTALLED_APPS = [
+    'debug_toolbar',
     'account.apps.AccountConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,7 +49,9 @@ INSTALLED_APPS = [
 
 ]
 
+
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware', # IMPORTANT: debug middleware has to be placed before other middleware (except for the GZipMiddleware for encoding of response's content)
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,7 +59,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
+
+
 
 ROOT_URLCONF = 'bookmarks.urls'
 
@@ -181,7 +187,12 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.user.user_details',
 ]
 
+# apply the correct mapping fir JavaScript and CSS files
 if DEBUG:
     import mimetypes
     mimetypes.add_type('application/javascript', '.js', True)
     mimetypes.add_type('text/css', '.css', True)
+
+INTERNAL_IPS = [ # Django debug toolbar will only display if the IP address matches an entry in the INTERNAL_IPS setting.
+    '127.0.0.1',
+]
