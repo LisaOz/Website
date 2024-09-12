@@ -1,0 +1,14 @@
+# Handle text files
+*.py text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+
+# Handle binary files
+*.png binary
+*.jpg binary
+*.gif binary
+
+# Handle scripts
+*.sh text eol=lf
+*.bat text eol=crlf
