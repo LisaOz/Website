@@ -1,0 +1,13 @@
+# Handle text files with LF endings
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.py text eol=lf   # For Python files, always use LF
+*.sh text eol=lf   # For shell scripts, always use LF
+*.bat text eol=crlf # For batch scripts (Windows), use CRLF
+*.txt text         # For text files, auto-convert to appropriate endings
+
+# Handle binary files
+*.png binary
+*.jpg binary
+*.gif binary

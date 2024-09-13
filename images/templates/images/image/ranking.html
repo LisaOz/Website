@@ -1,0 +1,20 @@
+<!-- This is a template for displaying the ranking of the images.
+ It iterates over the Image objects contained in the most_viewed_list and display
+ their names and a link to the image detail page.-->
+{% extends "base.html" %}
+
+{% block title %}Images ranking{% endblock %}
+
+{% block content %}
+
+    <h1>Images ranking</h1>
+    <ol>
+        {% for image in most_viewed %}
+            <li>
+                <a href="{{ image.get_absolute_url }}">
+                    {{ image.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ol>
+{% endblock %}
